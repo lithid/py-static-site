@@ -4,7 +4,7 @@ from leafnode import LeafNode
 
 
 class TextType(Enum):
-    TEXT = "texts"
+    TEXT = "text"
     BOLD = "bold"
     ITALIC = "italic"
     CODE = "code"
