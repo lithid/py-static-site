@@ -1,21 +1,9 @@
-from parentnode import ParentNode
-from leafnode import LeafNode
 from textnode import TextNode, TextType
 
 
 def main():
-    node = ParentNode(
-        "p",
-        [
-            LeafNode("b", "Bold text"),
-            LeafNode(None, "Normal text"),
-            LeafNode("i", "italic text"),
-            LeafNode(None, "Normal text"),
-        ],
-    )
-
-    print(node.to_html())
+    node = TextNode("This is a text node", TextType.BOLD, "https://www.boot.dev")
+    print(node)
 
 
-if __name__ == "__main__":
-    main()
+main()
