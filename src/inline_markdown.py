@@ -1,8 +1,9 @@
 import re
+
 from textnode import TextNode, TextType
 
 
-def text_to_textnodes(text: str):
+def text_to_textnodes(text):
     nodes = [TextNode(text, TextType.TEXT)]
     nodes = split_nodes_delimiter(nodes, "**", TextType.BOLD)
     nodes = split_nodes_delimiter(nodes, "_", TextType.ITALIC)
@@ -12,7 +13,7 @@ def text_to_textnodes(text: str):
     return nodes
 
 
-def split_nodes_delimiter(old_nodes: TextNode, delimiter, text_type: TextType):
+def split_nodes_delimiter(old_nodes, delimiter, text_type):
     new_nodes = []
     for old_node in old_nodes:
         if old_node.text_type != TextType.TEXT:
@@ -33,17 +34,7 @@ def split_nodes_delimiter(old_nodes: TextNode, delimiter, text_type: TextType):
     return new_nodes
 
 
-def extract_markdown_images(text: str):
-    #  ![rick roll](https://i.imgur.com/aKaOqIh.gif)
-    return re.findall(r"!\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
-
-
-def extract_markdown_links(text: str):
-    # [to boot dev](https://www.boot.dev)
-    return re.findall(r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
-
-
-def split_nodes_image(old_nodes: TextNode):
+def split_nodes_image(old_nodes):
     new_nodes = []
     for old_node in old_nodes:
         if old_node.text_type != TextType.TEXT:
@@ -73,7 +64,7 @@ def split_nodes_image(old_nodes: TextNode):
     return new_nodes
 
 
-def split_nodes_link(old_nodes: TextNode):
+def split_nodes_link(old_nodes):
     new_nodes = []
     for old_node in old_nodes:
         if old_node.text_type != TextType.TEXT:
@@ -95,3 +86,15 @@ def split_nodes_link(old_nodes: TextNode):
         if original_text != "":
             new_nodes.append(TextNode(original_text, TextType.TEXT))
     return new_nodes
+
+
+def extract_markdown_images(text):
+    pattern = r"!\[([^\[\]]*)\]\(([^\(\)]*)\)"
+    matches = re.findall(pattern, text)
+    return matches
+
+
+def extract_markdown_links(text):
+    pattern = r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)"
+    matches = re.findall(pattern, text)
+    return matches
