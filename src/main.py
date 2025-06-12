@@ -1,3 +1,4 @@
+from utils import copy_files_recursive
 from textnode import TextNode, TextType
 
 
@@ -6,4 +7,5 @@ def main():
     print(node)
 
 
-main()
+if __name__ == "__main__":
+    copy_files_recursive("static", "public", True)
