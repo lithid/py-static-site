@@ -6,5 +6,4 @@
 # -x: commands are printed to the terminal
 set -euo pipefail
 
-python3 src/main.py
-cd docs && python3 -m http.server 8888
+python3 src/main.py "/py-static-site/"

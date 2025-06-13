@@ -42,8 +42,10 @@ def extract_title(markdown: str):
     raise Exception("No h1 markdown found for title")
 
 
-def generate_page(from_path, template_path, dest_path):
-    print(f"Generating page from {from_path} to {dest_path} using {template_path}")
+def generate_page(from_path, template_path, dest_path, basepath):
+    print(
+        f"Generating page from {from_path} to {dest_path} using {template_path} with basepath {basepath}"
+    )
 
     with open(from_path, "r") as file:
         from_path_content = file.read()
@@ -54,15 +56,18 @@ def generate_page(from_path, template_path, dest_path):
     title = extract_title(from_path_content)
     html_content = markdown_to_html_node(from_path_content).to_html()
 
-    filtered_content = template_path_content.replace("{{ Title }}", title).replace(
-        "{{ Content }}", html_content
+    filtered_content = (
+        template_path_content.replace("{{ Title }}", title)
+        .replace("{{ Content }}", html_content)
+        .replace('href="/', 'href="' + basepath)
+        .replace('src="/', 'src="' + basepath)
     )
 
     with open(dest_path, "a") as file:
         file.write(filtered_content)
 
 
-def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, basepath):
     if not os.path.isdir(dest_dir_path):
         os.mkdir(dest_dir_path)
         print("Created target: ", dest_dir_path)
@@ -72,9 +77,14 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
         target_path = os.path.join(dest_dir_path, file)
         if os.path.exists(source_path):
             if os.path.isdir(source_path):
-                generate_pages_recursive(source_path, template_path, target_path)
+                generate_pages_recursive(
+                    source_path, template_path, target_path, basepath
+                )
             else:
 
                 generate_page(
-                    source_path, template_path, target_path.split(".")[0] + ".html"
+                    source_path,
+                    template_path,
+                    target_path.split(".")[0] + ".html",
+                    basepath,
                 )
